@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreshCart | Online Grocery Store</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f8faf7;
+    color: #203025;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+header {
+    background: white;
+    padding: 18px 6%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    box-shadow: 0 2px 10px #ddd;
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #245b32;
+}
+
+.logo span {
+    color: #50a85e;
+}
+
+.search {
+    display: flex;
+    width: 40%;
+}
+
+.search input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px 0 0 6px;
+    outline: none;
+}
+
+.search button,
+.green {
+    background: #287d3c;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 6px;
+}
+
+.search button {
+    border-radius: 0 6px 6px 0;
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.header-buttons button {
+    padding: 12px 17px;
+    border-radius: 6px;
+    background: #e9f4e9;
+    color: #287d3c;
+    font-weight: bold;
+}
+
+.header-buttons .green {
+    color: white;
+}
+
+.hero {
+    margin: 35px 6%;
+    padding: 65px;
+    background: linear-gradient(120deg, #dff1dd, #f1f7df);
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hero h1 {
+    font-size: 48px;
+    color: #204c2c;
+    margin: 15px 0;
+}
+
+.hero p {
+    line-height: 1.7;
+    color: #607060;
+}
+
+.hero .green {
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.hero img {
+    width: 280px;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+section {
+    margin: 50px 6%;
+}
+
+h2 {
+    margin-bottom: 22px;
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+.category {
+    padding: 22px;
+    background: white;
+    border: 1px solid #e2eae0;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+.category span {
+    display: block;
+    margin-top: 10px;
+}
+
+.category.active {
+    background: #e5f3e5;
+    border-color: #287d3c;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 17px;
+    border-radius: 12px;
+    border: 1px solid #e7ece5;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px #0001;
+}
+
+.product-img {
+    height: 190px;
+    background: #f1f7ef;
+    border-radius: 9px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.card:hover .product-img img {
+    transform: scale(1.08);
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.muted {
+    color: #888;
+    font-size: 13px;
+}
+
+.product-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.price {
+    font-weight: bold;
+    color: #287d3c;
+    font-size: 18px;
+}
+
+.card button {
+    background: #287d3c;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+}
+
+.card button:hover,
+.green:hover {
+    background: #1c5e2c;
+}
+
+footer {
+    text-align: center;
+    background: #183d25;
+    color: white;
+    padding: 40px;
+}
+
+footer p {
+    margin-top: 10px;
+    color: #d6e5d7;
+}
+
+/* MODALS */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0009;
+    z-index: 20;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.box {
+    background: white;
+    padding: 30px;
+    border-radius: 13px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    overflow: auto;
+    position: relative;
+}
+
+.box h2 {
+    margin-bottom: 10px;
+}
+
+.close {
+    position: absolute;
+    right: 17px;
+    top: 10px;
+    font-size: 28px;
+    background: none;
+    color: #777;
+}
+
+.box input,
+.box textarea,
+.box select {
+    width: 100%;
+    padding: 13px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.box form button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item img {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.cart-item button {
+    padding: 6px 10px;
+    border-radius: 5px;
+    background: #e8f3e8;
+    color: #287d3c;
+}
+
+.cart-total {
+    margin-top: 20px;
+}
+
+.cart-total button {
+    width: 100%;
+    margin-top: 15px;
+}
+
+#toast {
+    display: none;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #183d25;
+    color: white;
+    padding: 15px 22px;
+    border-radius: 8px;
+    z-index: 40;
+}
+
+@media(max-width:800px) {
+    header {
+        flex-wrap: wrap;
+    }
+
+    .search {
+        order: 3;
+        width: 100%;
+    }
+
+    .categories {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        padding: 35px;
+    }
+
+    .hero h1 {
+        font-size: 35px;
+    }
+
+    .hero img {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+@media(max-width:500px) {
+    .hero img {
+        display: none;
+    }
+
+    .categories {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .products {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">Fresh<span>Cart.</span></div>
+
+    <div class="search">
+        <input id="search" placeholder="Search groceries...">
+        <button onclick="renderProducts()">Search</button>
+    </div>
+
+    <div class="header-buttons">
+        <button id="loginButton" onclick="openModal('loginModal')">Login</button>
+        <button class="green" onclick="openCart()">
+            Cart (<span id="count">0</span>)
+        </button>
+    </div>
+
+</header>
+
+<!-- HERO -->
+
+<div class="hero">
+
+    <div>
+        <p>FRESHNESS DELIVERED DAILY</p>
+
+        <h1>Groceries made<br>simple and fresh.</h1>
+
+        <p>
+            Shop fresh fruits, vegetables and daily essentials
+            at great prices.
+        </p>
+
+        <a href="#products" class="green">Shop Now →</a>
+    </div>
+
+    <img
+        src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800"
+        alt="Fresh groceries"
+    >
+
+</div>
+
+<!-- CATEGORIES -->
+
+<section>
+
+    <h2>Shop by Category</h2>
+
+    <div class="categories">
+
+        <button class="category active"
+            onclick="setCategory('All',this)">
+            All<span>Everything</span>
+        </button>
+
+        <button class="category"
+            onclick="setCategory('Fruits',this)">
+            🍎<span>Fruits</span>
+        </button>
+
+        <button class="category"
+            onclick="setCategory('Vegetables',this)">
+            🥦<span>Vegetables</span>
+        </button>
+
+        <button class="category"
+            onclick="setCategory('Dairy',this)">
+            🥛<span>Dairy</span>
+        </button>
+
+        <button class="category"
+            onclick="setCategory('Bakery',this)">
+            🍞<span>Bakery</span>
+        </button>
+
+        <button class="category"
+            onclick="setCategory('Beverages',this)">
+            🧃<span>Beverages</span>
+        </button>
+
+    </div>
+
+</section>
+
+<!-- PRODUCTS -->
+
+<section id="products">
+
+    <h2>Fresh picks for you</h2>
+
+    <div class="products" id="productList"></div>
+
+</section>
+
+<footer>
+
+    <h2>FreshCart.</h2>
+
+    <p>Fresh groceries. Better living.</p>
+
+    <p>© 2026 FreshCart. All rights reserved.</p>
+
+</footer>
+
+<!-- LOGIN MODAL -->
+
+<div class="modal" id="loginModal">
+
+    <div class="box">
+
+        <button class="close"
+            onclick="closeModal('loginModal')">×</button>
+
+        <h2>Welcome to FreshCart</h2>
+
+        <p>Login to your account</p>
+
+        <form onsubmit="login(event)">
+
+            <input id="loginName"
+                placeholder="Full name" required>
+
+            <input id="loginEmail"
+                type="email"
+                placeholder="Email address" required>
+
+            <input id="loginPassword"
+                type="password"
+                placeholder="Password"
+                minlength="6" required>
+
+            <button class="green">Login / Create Account</button>
+
+        </form>
+
+        <p id="loginMessage"></p>
+
+    </div>
+
+</div>
+
+<!-- CART MODAL -->
+
+<div class="modal" id="cartModal">
+
+    <div class="box">
+
+        <button class="close"
+            onclick="closeModal('cartModal')">×</button>
+
+        <h2>Your Shopping Cart</h2>
+
+        <div id="cartItems"></div>
+
+        <div class="cart-total">
+
+            <h3>Total: ₹<span id="total">0</span></h3>
+
+            <button class="green" onclick="checkout()">
+                Proceed to Checkout
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHECKOUT MODAL -->
+
+<div class="modal" id="checkoutModal">
+
+    <div class="box">
+
+        <button class="close"
+            onclick="closeModal('checkoutModal')">×</button>
+
+        <h2>Delivery & Payment</h2>
+
+        <form onsubmit="placeOrder(event)">
+
+            <input id="customerName"
+                placeholder="Full name" required>
+
+            <input id="phone"
+                type="tel"
+                pattern="[0-9]{10}"
+                placeholder="10-digit phone number"
+                required>
+
+            <textarea id="address"
+                placeholder="Full delivery address"
+                required></textarea>
+
+            <select id="payment" required>
+
+                <option value="">Choose payment method</option>
+
+                <option value="Cash on Delivery">
+                    Cash on Delivery
+                </option>
+
+                <option value="UPI">
+                    UPI
+                </option>
+
+            </select>
+
+            <button class="green">Place Order</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+
+// PRODUCT DATABASE
+
+const products = [
+
+{
+id:1,
+name:"Fresh Apples",
+category:"Fruits",
+price:120,
+image:"https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=600"
+},
+
+{
+id:2,
+name:"Bananas",
+category:"Fruits",
+price:50,
+image:"https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600"
+},
+
+{
+id:3,
+name:"Oranges",
+category:"Fruits",
+price:80,
+image:"https://images.unsplash.com/photo-1547514701-42782101795e?w=600"
+},
+
+{
+id:4,
+name:"Grapes",
+category:"Fruits",
+price:100,
+image:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600"
+},
+
+{
+id:5,
+name:"Broccoli",
+category:"Vegetables",
+price:60,
+image:"https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=600"
+},
+
+{
+id:6,
+name:"Tomatoes",
+category:"Vegetables",
+price:35,
+image:"https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=600"
+},
+
+{
+id:7,
+name:"Carrots",
+category:"Vegetables",
+price:40,
+image:"https://images.unsplash.com/photo-1445282768818-728615cc910a?w=600"
+},
+
+{
+id:8,
+name:"Potatoes",
+category:"Vegetables",
+price:30,
+image:"https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600"
+},
+
+{
+id:9,
+name:"Fresh Milk",
+category:"Dairy",
+price:30,
+image:"https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600"
+},
+
+{
+id:10,
+name:"Cheese",
+category:"Dairy",
+price:110,
+image:"https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=600"
+},
+
+{
+id:11,
+name:"Butter",
+category:"Dairy",
+price:55,
+image:"https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=600"
+},
+
+{
+id:12,
+name:"Bread",
+category:"Bakery",
+price:40,
+image:"https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600"
+},
+
+{
+id:13,
+name:"Croissant",
+category:"Bakery",
+price:65,
+image:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600"
+},
+
+{
+id:14,
+name:"Orange Juice",
+category:"Beverages",
+price:90,
+image:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=600"
+},
+
+{
+id:15,
+name:"Coffee",
+category:"Beverages",
+price:150,
+image:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600"
+},
+
+{
+id:16,
+name:"Watermelon",
+category:"Fruits",
+price:70,
+image:"https://images.unsplash.com/photo-1563114773-84221bd62daa?w=600"
+}
+
+];
+
+let cart = [];
+let category = "All";
+
+// DISPLAY PRODUCTS
+
+function renderProducts() {
+
+    const search = document
+        .getElementById("search")
+        .value.toLowerCase();
+
+    const list = products.filter(p =>
+
+        (category === "All" || p.category === category) &&
+
+        p.name.toLowerCase().includes(search)
+
+    );
+
+    const container = document.getElementById("productList");
+
+    container.innerHTML = "";
+
+    if(list.length === 0) {
+
+        container.innerHTML = "<p>No products found.</p>";
+
+        return;
+
+    }
+
+    list.forEach(p => {
+
+        container.innerHTML += `
+
+        <div class="card">
+
+            <div class="product-img">
+
+                <img
+                    src="${p.image}"
+                    alt="${p.name}"
+                    loading="lazy"
+                    onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=Product';"
+                >
+
+            </div>
+
+            <h3>${p.name}</h3>
+
+            <p class="muted">${p.category}</p>
+
+            <div class="product-bottom">
+
+                <span class="price">₹${p.price}</span>
+
+                <button onclick="addToCart(${p.id})">
+                    + Add
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+// SEARCH
+
+document.getElementById("search")
+.addEventListener("input", renderProducts);
+
+// CATEGORY FILTER
+
+function setCategory(value, button) {
+
+    category = value;
+
+    document.querySelectorAll(".category")
+    .forEach(b => b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    renderProducts();
+
+}
+
+// ADD TO CART
+
+function addToCart(id) {
+
+    const item = cart.find(p => p.id === id);
+
+    if(item) {
+
+        item.quantity++;
+
+    } else {
+
+        cart.push({
+            ...products.find(p => p.id === id),
+            quantity: 1
+        });
+
+    }
+
+    updateCart();
+
+    toast("Product added to cart!");
+
+}
+
+// UPDATE CART
+
+function updateCart() {
+
+    document.getElementById("count").textContent =
+
+        cart.reduce((sum,p) => sum + p.quantity, 0);
+
+    const container = document.getElementById("cartItems");
+
+    container.innerHTML = "";
+
+    let total = 0;
+
+    if(cart.length === 0) {
+
+        container.innerHTML = "<p>Your cart is empty.</p>";
+
+    }
+
+    cart.forEach(p => {
+
+        total += p.price * p.quantity;
+
+        container.innerHTML += `
+
+        <div class="cart-item">
+
+            <img src="${p.image}" alt="${p.name}">
+
+            <div>
+
+                <b>${p.name}</b>
+
+                <p>₹${p.price} × ${p.quantity}</p>
+
+            </div>
+
+            <div>
+
+                <button onclick="changeQuantity(${p.id},-1)">−</button>
+
+                <button onclick="changeQuantity(${p.id},1)">+</button>
+
+                <button onclick="removeItem(${p.id})">Remove</button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById("total").textContent = total;
+
+}
+
+// CHANGE QUANTITY
+
+function changeQuantity(id, change) {
+
+    const item = cart.find(p => p.id === id);
+
+    if(!item) return;
+
+    item.quantity += change;
+
+    if(item.quantity <= 0) {
+
+        removeItem(id);
+
+    } else {
+
+        updateCart();
+
+    }
+
+}
+
+// REMOVE PRODUCT
+
+function removeItem(id) {
+
+    cart = cart.filter(p => p.id !== id);
+
+    updateCart();
+
+}
+
+// OPEN CART
+
+function openCart() {
+
+    updateCart();
+
+    openModal("cartModal");
+
+}
+
+// MODALS
+
+function openModal(id) {
+
+    document.getElementById(id).classList.add("show");
+
+}
+
+function closeModal(id) {
+
+    document.getElementById(id).classList.remove("show");
+
+}
+
+document.querySelectorAll(".modal").forEach(modal => {
+
+    modal.addEventListener("click", e => {
+
+        if(e.target === modal) {
+
+            modal.classList.remove("show");
+
+        }
+
+    });
+
+});
+
+// LOGIN
+
+function login(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("loginName").value.trim();
+
+    const email = document.getElementById("loginEmail").value.trim();
+
+    localStorage.setItem(
+        "freshCartUser",
+        JSON.stringify({name,email})
+    );
+
+    document.getElementById("loginButton").textContent =
+        name.split(" ")[0];
+
+    document.getElementById("loginMessage").textContent =
+        "Login successful! Welcome " + name;
+
+    toast("Welcome to FreshCart!");
+
+    setTimeout(() => closeModal("loginModal"), 1000);
+
+}
+
+// CHECKOUT
+
+function checkout() {
+
+    if(cart.length === 0) {
+
+        toast("Your cart is empty!");
+
+        return;
+
+    }
+
+    const user = JSON.parse(
+        localStorage.getItem("freshCartUser") || "null"
+    );
+
+    if(!user) {
+
+        closeModal("cartModal");
+
+        openModal("loginModal");
+
+        toast("Please login before checkout.");
+
+        return;
+
+    }
+
+    document.getElementById("customerName").value = user.name;
+
+    closeModal("cartModal");
+
+    openModal("checkoutModal");
+
+}
+
+// PLACE ORDER
+
+function placeOrder(event) {
+
+    event.preventDefault();
+
+    const method = document.getElementById("payment").value;
+
+    const total = cart.reduce(
+        (sum,p) => sum + p.price * p.quantity, 0
+    );
+
+    if(method === "UPI") {
+
+        // Replace with your real merchant UPI ID.
+        const upiId = "YOUR_UPI_ID@bank";
+
+        const url =
+        `upi://pay?pa=${encodeURIComponent(upiId)}&pn=FreshCart&am=${total}&cu=INR`;
+
+        window.location.href = url;
+
+        toast("Opening your UPI app...");
+
+        return;
+
+    }
+
+    const orders = JSON.parse(
+        localStorage.getItem("freshCartOrders") || "[]"
+    );
+
+    orders.push({
+
+        name: document.getElementById("customerName").value,
+
+        phone: document.getElementById("phone").value,
+
+        address: document.getElementById("address").value,
+
+        total: total,
+
+        payment: method,
+
+        items: cart,
+
+        date: new Date().toLocaleString()
+
+    });
+
+    localStorage.setItem(
+        "freshCartOrders",
+        JSON.stringify(orders)
+    );
+
+    cart = [];
+
+    updateCart();
+
+    closeModal("checkoutModal");
+
+    toast("Order placed successfully!");
+
+}
+
+// NOTIFICATION
+
+function toast(message) {
+
+    const el = document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.style.display = "block";
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+
+        el.style.display = "none";
+
+    }, 2500);
+
+}
+
+// LOAD SAVED LOGIN
+
+const savedUser = JSON.parse(
+    localStorage.getItem("freshCartUser") || "null"
+);
+
+if(savedUser) {
+
+    document.getElementById("loginButton").textContent =
+        savedUser.name.split(" ")[0];
+
+}
+
+// INITIAL LOAD
+
+renderProducts();
+
+updateCart();
+
+</script>
+
+</body>
+</html>
